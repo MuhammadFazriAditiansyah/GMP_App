@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Finding;
+use App\Models\Closing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,11 +40,27 @@ class FindingController extends Controller
 
         $findings = $query->get();
 
-        $years = Finding::select('year')->distinct()->orderBy('year', 'desc')->pluck('year');
+        $years = Finding::whereNotNull('year')
+            ->select('year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
 
-        return view('findings.index', compact('findings', 'years', 'year'));
+        // Hanya hitung jika admin
+        $countFindings = auth()->user()?->role === 'admin' ? Finding::count() : null;
+        $countStatus = auth()->user()?->role === 'admin' ? Finding::where('status', 'Close')->count() : null;
+        $countUsers = auth()->user()?->role === 'admin' ? User::count() : null;
 
+        return view('findings.index', compact(
+            'findings',
+            'years',
+            'year',
+            'countFindings',
+            'countStatus',
+            'countUsers'
+        ));
     }
+
 
 
     /**

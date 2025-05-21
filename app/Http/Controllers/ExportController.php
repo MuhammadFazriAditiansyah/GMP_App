@@ -28,7 +28,7 @@ class ExportController extends Controller
         }
 
         if ($request->has('year') && $request->year) {
-            $findings->whereYear('created_at', $request->year);
+            $findings->where('year', $request->year);
         }
 
         $findings = $findings->get();
@@ -84,7 +84,7 @@ class ExportController extends Controller
             $query->where('department', $department);
         }
         if ($year) {
-            $query->whereYear('created_at', $year);
+            $query->where('year', $year);
         }
 
         $findings = $query->get();

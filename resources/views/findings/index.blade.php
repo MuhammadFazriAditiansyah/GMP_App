@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="d-flex flex-wrap mt-4 container align-items-center justify-content-between">
-        <h4 class="mt-2"><i class="fas fa-list"></i> Data Finding & Closing</h4>
+        <h4 class="mt-1"><i class="fas fa-list"></i> Data Finding & Closing</h4>
     </div>
 
     <div class="container">
@@ -35,15 +35,63 @@
         @endif
     </div>
 
+    @auth
+        @if (auth()->user()->role === 'admin')
+            <div class="container mt-2">
+                <div class="row">
+                    <!-- Total Finding -->
+                    <div class="col-md-4 mb-4">
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>{{ $countFindings }}</h3>
+                                <p>Total Finding</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Closing -->
+                    <div class="col-md-4 mb-4">
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>{{ $countStatus }}</h3>
+                                <p>Total Closing</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total User -->
+                    <div class="col-md-4 mb-4">
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>{{ $countUsers }}</h3>
+                                <p>Total User</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endauth
+
     <div class="d-flex flex-wrap container align-items-center justify-content-between">
-        <form method="GET" action="{{ route('findings.index') }}" class="mt-3 d-flex gap-2 flex-wrap align-items-center"
+        <form method="GET" action="{{ route('findings.index') }}" class="d-flex gap-2 flex-wrap align-items-center"
             id="searchForm">
-            <select name="year" onchange="this.form.submit()" class="form-select rounded-pill shadow-sm" style="width: 90px; height: 42px;">
-                @foreach($years as $y)
+            <select name="year" onchange="this.form.submit()" class="form-select rounded-pill shadow-sm"
+                style="width: 90px; height: 42px;">
+                @foreach ($years as $y)
                     <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
                 @endforeach
             </select>
-  
+
             <select name="week" class="form-select rounded-pill shadow-sm" style="width: 170px; height: 42px;">
                 <option value="">Semua Minggu</option>
                 @for ($i = 1; $i <= 52; $i++)
@@ -123,8 +171,8 @@
                         <td class="align-middle">{{ $no + 1 }}</td>
                         <td class="align-middle">
                             @if ($finding->image)
-                                <img src="{{ asset('storage/' . $finding->image) }}" width="150" class="img-thumbnail"
-                                    data-bs-toggle="tooltip" title="Klik untuk memperbesar"
+                                <img src="{{ asset('storage/' . $finding->image) }}" width="150"
+                                    class="img-thumbnail" data-bs-toggle="tooltip" title="Klik untuk memperbesar"
                                     onclick="showImage('{{ asset('storage/' . $finding->image) }}')">
                             @else
                                 <span class="text-muted">Tidak ada foto</span>
@@ -284,6 +332,64 @@
     </div>
 
     <style>
+        .small-box {
+            position: relative;
+            display: block;
+            background: #17a2b8;
+            /* default info */
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+
+        .small-box:hover {
+            transform: translateY(-3px);
+        }
+
+        .small-box .inner h3 {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+        }
+
+        .small-box .inner p {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .small-box .icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 50px;
+            opacity: 0.3;
+        }
+
+        .small-box-footer {
+            display: block;
+            padding-top: 10px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .bg-info {
+            background-color: #17a2b8 !important;
+        }
+
+        .bg-success {
+            background-color: #28a745 !important;
+        }
+
+        .bg-warning {
+            background-color: #ffc107 !important;
+            color: #212529 !important;
+        }
+
+
         .toast-container {
             max-width: 600px;
         }
