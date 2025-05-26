@@ -14,6 +14,7 @@ class Finding extends Model
         'department',
         'description',
         'week',
+        'year',
     ];
 
     public function closing()
