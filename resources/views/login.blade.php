@@ -245,7 +245,11 @@
                     <button type="submit" class="btn btn-primary">Login</button>
                 </div>
 
-                <div class="text-center mt-3">
+                  <div class="text-center mt-4">
+                    <span><a href="{{ route('password.request') }}" class="text-success fw-semibold">Lupa Password?</a></span>
+                </div>
+
+                <div class="text-center mt-2">
                     <span>Belum punya akun? <a href="{{ route('register') }}" class="text-success fw-semibold">Register
                             disini</a></span>
                 </div>

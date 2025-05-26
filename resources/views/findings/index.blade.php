@@ -39,7 +39,6 @@
         @if (auth()->user()->role === 'admin')
             <div class="container mt-2">
                 <div class="row">
-                    <!-- Total Finding -->
                     <div class="col-md-4 mb-4">
                         <div class="small-box bg-info">
                             <div class="inner">
@@ -51,8 +50,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Total Closing -->
                     <div class="col-md-4 mb-4">
                         <div class="small-box bg-success">
                             <div class="inner">
@@ -64,8 +61,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Total User -->
                     <div class="col-md-4 mb-4">
                         <div class="small-box bg-warning">
                             <div class="inner">
@@ -224,7 +219,7 @@
                                         data-bs-target="#confirmStatusModal{{ $finding->id }}">
                                         {{ $finding->status }}
                                     </button>
-                                    <!-- Modal ubah status -->
+
                                     <div class="modal fade" id="confirmStatusModal{{ $finding->id }}" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
@@ -317,7 +312,6 @@
         </table>
     </div>
 
-    <!-- Modal Gambar -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -338,7 +332,7 @@
             background: #17a2b8;
             /* default info */
             color: #fff;
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
@@ -389,7 +383,6 @@
             color: #212529 !important;
         }
 
-
         .toast-container {
             max-width: 600px;
         }
@@ -407,6 +400,56 @@
 
         #searchBtn:hover {
             opacity: 0.85;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .before-after-img {
+            max-width: 150px;
+            max-height: 120px;
+            cursor: pointer;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+
+            .before-after-img {
+                max-width: 100px;
+                max-height: 80px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            .table-responsive {
+                overflow-x: auto;
+            }
+
+            td>div.d-flex.flex-column>a.btn,
+            td>div.d-flex.flex-column>form>button.btn {
+                width: 100%;
+                margin-bottom: 0.25rem;
+            }
+
+            form#searchForm,
+            div.d-flex.flex-wrap.justify-content-end.flex-grow-1 {
+                flex-wrap: wrap !important;
+            }
+
+            form#searchForm select,
+            form#searchForm button {
+                width: 100% !important;
+                margin-bottom: 0.5rem;
+            }
+
+            div.d-flex.flex-wrap.justify-content-end.flex-grow-1>a.btn,
+            div.d-flex.flex-wrap.justify-content-end.flex-grow-1>button.btn {
+                flex-grow: 1;
+                min-width: 140px;
+            }
         }
     </style>
 

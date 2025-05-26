@@ -6,6 +6,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
+
 
 class UserController extends Controller
 {
@@ -42,24 +46,24 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
-    $request->validate([
-        'name'     => 'required|string|max:255',
-        'email'    => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:6',
-        'department' => 'required|string|max:255',
-    ]);
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
+            'department' => 'required|string|max:255',
+        ]);
 
-    $user = User::create([
-        'name'     => $request->name,
-        'email'    => $request->email,
-        'password' => Hash::make($request->password),
-        'role'     => 'Guest',
-        'department' => $request->department,
-    ]);
+        $user = User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => Hash::make($request->password),
+            'role'     => 'Guest',
+            'department' => $request->department,
+        ]);
 
-    Auth::login($user);
+        Auth::login($user);
 
-    return redirect()->route('home')->with('success', 'Register berhasil, Selamat datang di GMP App');
+        return redirect()->route('home')->with('success', 'Register berhasil, Selamat datang di GMP App');
     }
 
     public function index()
@@ -129,5 +133,75 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('user.index')->with('failed', 'Akun berhasil di hapus!');
+    }
+
+    public function showForgotForm()
+    {
+        return view('auth.forgot');
+    }
+
+    public function sendOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ], [
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.exists' => 'Email yang dipilih tidak valid.',
+        ]);
+
+        $otp = rand(100000, 999999); 
+        Session::put('otp', $otp);
+        Session::put('reset_email', $request->email);
+        Session::put('otp_expires_at', Carbon::now()->addMinutes(3)); // waktu kedaluwarsa OTP
+
+        return redirect()->route('password.verifyForm')->with('otp_code', $otp);
+    }
+
+    public function showOtpForm()
+    {
+        return view('auth.verify');
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'otp' => 'required|numeric',
+        ]);
+
+        $expiresAt = Session::get('otp_expires_at');
+
+        if (!$expiresAt || now()->greaterThan(Carbon::parse($expiresAt))) {
+            Session::forget(['otp', 'otp_expires_at', 'reset_email']);
+            return redirect()->route('password.request')->with('error', 'Kode OTP telah kedaluwarsa, silakan coba lagi.');
+        }
+
+        if ($request->otp == Session::get('otp')) {
+            return view('auth.reset')->with('success', 'Kode OTP berhasil diverifikasi. Silakan buat password baru.');
+        }
+
+        return redirect()->back()->with('error', 'Kode OTP salah!');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $email = Session::get('reset_email');
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            return redirect()->route('password.request')->with('error', 'Email tidak ditemukan.');
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        Session::forget(['otp', 'reset_email']);
+
+        return redirect()->route('login')->with('success', 'Password berhasil direset, silahkan login!');
     }
 }

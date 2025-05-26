@@ -29,6 +29,12 @@ Route::get('/register', [UserController::class, 'showRegister'])->name('register
 Route::post('/register', [UserController::class, 'register'])->name('register.store');
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
+Route::get('/forgot-password', [UserController::class, 'showForgotForm'])->name('password.request');
+Route::post('/forgot-password', [UserController::class, 'sendOtp'])->name('password.sendOtp');
+Route::get('/verify-otp', [UserController::class, 'showOtpForm'])->name('password.verifyForm');
+Route::post('/verify-otp', [UserController::class, 'verifyOtp'])->name('password.verify');
+Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('password.reset');
+
 Route::get('/error-permission', function () {
     return view('errors.permission');
 })->name('error.permission');
