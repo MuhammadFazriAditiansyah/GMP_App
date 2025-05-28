@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,7 +56,6 @@
             font-weight: 600;
         }
 
-        /* Footer Styles */
         .footer {
             background-color: #f8f9fa;
             padding: 10px 0;
@@ -95,6 +95,13 @@
                         <a class="nav-link" href="{{ route('findings.index') }}"><i class="fas fa-list"></i> Data
                             Finding & Closing</a>
                     </li>
+                    @if (auth()->user()->role === 'admin')
+                        <li class="nav-item mx-1">
+                            <a class="nav-link" href="{{ route('admin.verifikasi') }}">
+                                <i class="fas fa-user-check"></i> Verifikasi Akun
+                            </a>
+                        </li>
+                    @endif
                     <li class="nav-item mx-1">
                         <a class="nav-link" href="{{ route('user.index') }}"><i class="fas fa-user"></i> Profile</a>
                     </li>
@@ -102,7 +109,6 @@
             </div>
         </div>
     </nav>
-
 
     <div class="container">
         @yield('content')

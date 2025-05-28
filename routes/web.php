@@ -60,6 +60,8 @@ Route::middleware('IsAdmin')->group(function () {
     Route::post('/finding/update/{id}', [FindingController::class, 'update'])->name('findings.update');
     Route::delete('/finding/delete/{id}', [FindingController::class, 'destroy'])->name('findings.delete');
     Route::patch('/findings/{id}/toggle-status', [FindingController::class, 'toggleStatus'])->name('findings.toggleStatus');
+    Route::get('/verifikasi-akun', [UserController::class, 'showUnverified'])->name('admin.verifikasi');
+    Route::post('/verifikasi-akun/{id}', [UserController::class, 'verifyUser'])->name('admin.verifikasi.user');
 
 });
 

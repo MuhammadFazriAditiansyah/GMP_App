@@ -25,18 +25,42 @@ class UserController extends Controller
             'password' => 'required',
         ]);
 
-        $user = $request->only(['email', 'password']);
-        if (Auth::attempt($user)) {
-            return redirect()->route('home')->with('success', 'Login berhasil, Selamat datang di GMP App');;
+        $credentials = $request->only(['email', 'password']);
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+
+            if (!$user->is_verified) {
+                Auth::logout(); // logout segera
+                return redirect()->back()->with('error', 'Akun Anda belum diverifikasi oleh admin.');
+            }
+
+            return redirect()->route('home')->with('success', 'Login berhasil, Selamat datang di GMP App');
         } else {
             return redirect()->back()->with('error', 'Login gagal, silahkan coba kembali !');
         }
     }
 
+
     public function logout()
     {
         Auth::logout();
         return redirect()->route('login')->with('success', 'Anda telah berhasil Logout !');
+    }
+
+    public function showUnverified()
+    {
+        $users = User::where('is_verified', false)->get();
+        return view('admin.verifikasi', compact('users'));
+    }
+
+    public function verifyUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->is_verified = true;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Akun berhasil diverifikasi.');
     }
 
     public function showRegister()
@@ -47,24 +71,24 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'name'       => 'required|string|max:255',
+            'email'      => 'required|string|email|max:255|unique:users',
+            'password'   => 'required|string|min:6',
             'department' => 'required|string|max:255',
         ]);
 
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => 'Guest',
-            'department' => $request->department,
+        User::create([
+            'name'        => $request->name,
+            'email'       => $request->email,
+            'password'    => Hash::make($request->password),
+            'role'        => 'Guest',
+            'department'  => $request->department,
+            'is_verified' => false,
         ]);
 
-        Auth::login($user);
-
-        return redirect()->route('home')->with('success', 'Register berhasil, Selamat datang di GMP App');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan tunggu verifikasi admin sebelum login.');
     }
+
 
     public function index()
     {
@@ -150,7 +174,7 @@ class UserController extends Controller
             'email.exists' => 'Email yang dipilih tidak valid.',
         ]);
 
-        $otp = rand(100000, 999999); 
+        $otp = rand(100000, 999999);
         Session::put('otp', $otp);
         Session::put('reset_email', $request->email);
         Session::put('otp_expires_at', Carbon::now()->addMinutes(3)); // waktu kedaluwarsa OTP

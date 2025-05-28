@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #a8e063, #56ab2f);
+            background: linear-gradient(135deg, #188150);
             display: flex;
             justify-content: center;
             align-items: center;

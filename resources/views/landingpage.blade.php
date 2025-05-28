@@ -31,7 +31,7 @@
             background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/image/landing.gif');
             background-size: cover;
             background-position: center;
-            padding: 120px 0;
+            padding: 140px 0;
             border-radius: 30px;
             margin: 40px auto;
             max-width: 95%;
@@ -120,224 +120,137 @@
     <section class="hero text-white">
         <div class="container">
             <h1 class="mb-3">MONITORING <span class="text-warning">GMP</span></h1>
-            <h5 class="mb-4">Sistem pencatatan temuan dan perbaikan Good Manufacturing Practices secara digital dan
-                real-time.</h5>
-            <a href="{{ route('login') }}" class="btn btn-main"> <i class="bi bi-arrow-right-square"></i> Masuk Sekarang</a>
+            <h5 class="mb-4">
+                Platform digital untuk memantau, mencatat, dan menindaklanjuti temuan Good Manufacturing Practices<br>
+                secara akurat, cepat, dan terintegrasi dalam satu sistem.
+            </h5>
+            <a href="{{ route('login') }}" class="btn btn-main mt-3">
+                <i class="bi bi-arrow-right-square"></i> Masuk Sekarang
+            </a>
         </div>
     </section>
 
+
     <!-- Fitur Utama -->
-    <div class="container mt-5">
+    <div class="container my-5 pb-5">
+        <h2 class="section-title">Fitur Unggulan</h2>
+        <p class="text-center mb-5 text-muted">GMP App hadir dengan fitur-fitur penting untuk mendukung monitoring dan
+            perbaikan Good Manufacturing Practices secara efisien.</p>
         <div class="row text-center">
-            <div class="col-12 col-md-4 mb-4">
+            <div class="col-md-4 mb-4">
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-body">
-                        <i class="fas fa-search fa-3x text-danger mb-3"></i>
-                        <h5 class="card-title">Monitoring</h5>
-                        <p class="card-text">Pantau temuan GMP secara real-time.</p>
+                        <i class="fas fa-eye fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Pantau Temuan</h5>
+                        <p class="card-text">Lacak seluruh temuan langsung dari dashboard real-time.</p>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4 mb-4">
+            <div class="col-md-4 mb-4">
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-body">
-                        <i class="fas fa-tasks fa-3x text-warning mb-3"></i>
-                        <h5 class="card-title">Manajemen</h5>
-                        <p class="card-text">Atur dan kelola closing dengan mudah.</p>
+                        <i class="fas fa-tools fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Kelola Perbaikan</h5>
+                        <p class="card-text">Sederhanakan proses perbaikan dan dokumentasi closing.</p>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4 mb-4">
+            <div class="col-md-4 mb-4">
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-body">
-                        <i class="fas fa-check-circle fa-3x text-primary mb-3"></i>
-                        <h5 class="card-title">Evaluasi</h5>
-                        <p class="card-text">Pastikan setiap temuan terselesaikan.</p>
+                        <i class="fas fa-chart-pie fa-3x text-warning mb-3"></i>
+                        <h5 class="card-title">Lihat Statistik</h5>
+                        <p class="card-text">Analisa tren dan kinerja langsung dari tampilan visual yang jelas.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container table-responsive pb-5">
-        <h2 class="section-title">Daftar Temuan Terbaru</h2>
-        <table class="table table-bordered table-hover text-center mx-auto mt-4">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th style="width: 17%;">Before</th>
-                    <th style="width: 17%;">After</th>
-                    <th style="width: 12%;">Departemen</th>
-                    <th style="width: 12%;">Kriteria GMP</th>
-                    <th style="width: 25%;">Deskripsi</th>
-                    <th style="width: 10%;">Status</th>
-                    @auth
-                        @if (auth()->user()->role === 'admin')
-                            <th>Aksi</th>
-                        @endif
-                    @endauth
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($findings as $no => $finding)
-                    <tr class="{{ $no % 2 == 0 ? 'table-light' : '' }}">
-                        <td class="align-middle">{{ $no + 1 }}</td>
-                        <td class="align-middle">
-                            @if ($finding->image)
-                                <img src="{{ asset('storage/' . $finding->image) }}" width="150"
-                                    class="img-thumbnail" data-bs-toggle="tooltip" title="Klik untuk memperbesar"
-                                    onclick="showImage('{{ asset('storage/' . $finding->image) }}')">
-                            @else
-                                <span class="text-muted">Tidak ada foto</span>
-                            @endif
-                        </td>
-                        <td class="align-middle">
-                            @if ($finding->image2)
-                                <div class="d-flex flex-column align-items-center">
-                                    <img src="{{ asset('storage/' . $finding->image2) }}" width="150"
-                                        class="img-thumbnail mb-2" data-bs-toggle="tooltip"
-                                        title="Klik untuk memperbesar"
-                                        onclick="showImage('{{ asset('storage/' . $finding->image2) }}')">
-
-                                    @auth
-                                        @if (auth()->user()->department === $finding->department && $finding->image2)
-                                            <a href="{{ route('findings.editPhotoForm', $finding->id) }}"
-                                                class="btn btn-sm btn-warning text-white">
-                                                <i class="fas fa-edit"></i> Edit
-                                            </a>
-                                        @endif
-                                    @endauth
-                                </div>
-                            @else
-                                @auth
-                                    @if (auth()->user()->role === 'user')
-                                        <a href="{{ route('findings.uploadPhotoForm', $finding->id) }}"
-                                            class="btn btn-sm btn-success">
-                                            <i class="fas fa-upload"></i> Upload Foto
-                                        </a>
-                                    @else
-                                        <span class="text-muted">Foto belum diupload</span>
-                                    @endif
-                                @else
-                                    <span class="text-muted">Foto belum diupload</span>
-                                @endauth
-                            @endif
-                        </td>
-                        <td class="align-middle">{{ $finding->department }}</td>
-                        <td class="align-middle">{{ $finding->gmp_criteria }}</td>
-                        <td class="align-middle">{{ $finding->description }}</td>
-                        <td class="align-middle">
-                            @php
-                                $statusClass = $finding->status === 'Open' ? 'btn-danger' : 'btn-success';
-                            @endphp
-
-                            @auth
-                                @if (auth()->user()->role === 'admin')
-                                    <button type="button" class="btn btn-sm {{ $statusClass }}" data-bs-toggle="modal"
-                                        data-bs-target="#confirmStatusModal{{ $finding->id }}">
-                                        {{ $finding->status }}
-                                    </button>
-                                    <!-- Modal ubah status -->
-                                    <div class="modal fade" id="confirmStatusModal{{ $finding->id }}" tabindex="-1">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Konfirmasi Ubah Status</h5>
-                                                    <button type="button" class="btn-close"
-                                                        data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Apakah Anda yakin ingin mengubah status menjadi
-                                                    <strong>{{ $finding->status === 'Open' ? 'Close' : 'Open' }}</strong>?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary me-auto"
-                                                        data-bs-dismiss="modal">Batal</button>
-                                                    <form action="{{ route('findings.toggleStatus', $finding->id) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit" class="btn btn-primary">Ubah</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @else
-                                    <span class="btn {{ $statusClass }} btn-sm">{{ $finding->status }}</span>
-                                @endif
-                            @else
-                                <span class="btn {{ $statusClass }} btn-sm">{{ $finding->status }}</span>
-                            @endauth
-                        </td>
-
-                        @auth
-                            @if (auth()->user()->role === 'admin')
-                                <td class="align-middle">
-                                    <div class="d-flex flex-column flex-md-row justify-content-center">
-                                        <a href="{{ route('findings.edit', $finding->id) }}"
-                                            class="btn btn-sm me-md-2 mb-2 mb-md-0 p-2"
-                                            style="border: 1px solid rgb(255, 149, 0); background-color: white; color: rgb(255, 149, 0);"
-                                            onmouseover="this.style.backgroundColor='rgb(255, 149, 0)'; this.style.color='white';"
-                                            onmouseout="this.style.backgroundColor='white'; this.style.color='rgb(255, 149, 0)';">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-sm"
-                                            style="border: 1px solid red; background-color: white; color: red;"
-                                            onmouseover="this.style.backgroundColor='red'; this.style.color='white';"
-                                            onmouseout="this.style.backgroundColor='white'; this.style.color='red';"
-                                            data-bs-toggle="modal" data-bs-target="#modalDelete{{ $finding->id }}">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-
-                                    <!-- Modal Hapus -->
-                                    <div class="modal fade" id="modalDelete{{ $finding->id }}" tabindex="-1">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content border-danger">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title">Konfirmasi Hapus</h5>
-                                                    <button type="button" class="btn-close btn-close-white"
-                                                        data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat
-                                                    dibatalkan.
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <form action="{{ route('findings.delete', $finding->id) }}"
-                                                        method="POST" class="w-100 d-flex">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="button" class="btn btn-secondary me-auto"
-                                                            data-bs-dismiss="modal">Batal</button>
-                                                        <button type="submit" class="btn btn-danger">Hapus</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            @endif
-                        @endauth
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="8" class="text-center text-muted">Data belum tersedia.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Modal Gambar -->
-    <div class="modal fade" id="imageModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content bg-transparent border-0">
-                <div class="modal-body text-center">
-                    <img id="modalImage" src="" class="img-fluid rounded shadow">
+    <!-- What Client Say -->
+    <div class="container my-5">
+        <h2 class="section-title">Apa Kata Pengguna</h2>
+        <p class="text-center mb-5 text-muted">Pendapat mereka yang telah menggunakan GMP App untuk kegiatan monitoring
+            dan audit harian.</p>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm border-0 h-100 p-4">
+                    <div class="d-flex align-items-start mb-3">
+                        <img src="https://i.pravatar.cc/80?img=1" alt="User 1" class="rounded-circle me-3"
+                            width="60" height="60">
+                        <div>
+                            <h6 class="mb-0">Rina A.</h6>
+                            <small class="text-muted">QA Supervisor</small>
+                        </div>
+                    </div>
+                    <p class="card-text">“GMP App sangat membantu kami dalam memonitor dan menindaklanjuti temuan harian
+                        dengan lebih cepat dan terstruktur.”</p>
+                    <div class="text-warning">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                    </div>
                 </div>
             </div>
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm border-0 h-100 p-4">
+                    <div class="d-flex align-items-start mb-3">
+                        <img src="https://i.pravatar.cc/80?img=2" alt="User 2" class="rounded-circle me-3"
+                            width="60" height="60">
+                        <div>
+                            <h6 class="mb-0">Budi S.</h6>
+                            <small class="text-muted">Produksi</small>
+                        </div>
+                    </div>
+                    <p class="card-text">“Tampilan sederhana, mudah digunakan, dan sangat efisien. Saya bisa langsung
+                        melihat apa yang harus ditindaklanjuti.”</p>
+                    <div class="text-warning">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm border-0 h-100 p-4">
+                    <div class="d-flex align-items-start mb-3">
+                        <img src="https://i.pravatar.cc/80?img=3" alt="User 3" class="rounded-circle me-3"
+                            width="60" height="60">
+                        <div>
+                            <h6 class="mb-0">Sari M.</h6>
+                            <small class="text-muted">Engineering</small>
+                        </div>
+                    </div>
+                    <p class="card-text">“Laporan otomatis dan visualisasi tren membuat pekerjaan kami lebih mudah dan
+                        terukur. Sangat direkomendasikan!”</p>
+                    <div class="text-warning">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="container my-5">
+        <div class="bg-success text-white text-center rounded-4 p-5 shadow-sm">
+            <h2 class="fw-bold mb-3">Siap Memulai Monitoring GMP Lebih Baik?</h2>
+            <p class="mb-4">Gabung sekarang dan jadikan proses pemantauan dan perbaikan lebih efisien, akurat, dan
+                terintegrasi!</p>
+            <a href="{{ route('login') }}" class="btn btn-light text-success fw-semibold px-4 py-2 rounded-pill me-2">
+                <i class="bi bi-box-arrow-in-right me-1"></i> Masuk Sekarang
+            </a>
+            <a href="{{ route('register') }}" class="btn btn-outline-light fw-semibold px-4 py-2 rounded-pill">
+                <i class="bi bi-person-plus-fill me-1"></i> Daftar Gratis
+            </a>
         </div>
     </div>
 
@@ -349,12 +262,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function showImage(src) {
-            document.getElementById('modalImage').src = src;
-            new bootstrap.Modal(document.getElementById('imageModal')).show();
-        }
-    </script>
 </body>
 
 </html>

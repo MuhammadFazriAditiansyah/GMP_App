@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('admingmp'),
             'role' => 'admin',
             'department' => 'QA',
+            'is_verified' => true,
         ]);
 
         User::create([
@@ -28,6 +29,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('produksi'),
             'role' => 'user',
             'department' => 'Produksi',
+            'is_verified' => true,
         ]);
 
         User::create([
@@ -36,6 +38,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('warehouse'),
             'role' => 'user',
             'department' => 'Warehouse',
+            'is_verified' => true,
         ]);
 
         User::create([
@@ -44,6 +47,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('engineering'),
             'role' => 'user',
             'department' => 'Engineering',
+            'is_verified' => true,
         ]);
 
         User::create([
@@ -52,6 +56,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('hrusergmp'),
             'role' => 'user',
             'department' => 'HR',
+            'is_verified' => true,
         ]);
 
         User::create([
@@ -60,6 +65,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('qausergmp'),
             'role' => 'user',
             'department' => 'QA',
+            'is_verified' => true,
         ]);
 
     }
